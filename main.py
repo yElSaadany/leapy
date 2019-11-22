@@ -1,4 +1,14 @@
 import pygame as pg
+import math
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))
+
+
+def collide(element1, element2):
+    if (element2.x >= element1.x and
+        element2.x <= (element1.x + element1.width) and
+        element2.y <= (element1.y + element1.height)):
+        return True
 pg.init()
 
 window = pg.display.set_mode((600, 600))
@@ -10,11 +20,12 @@ width = 50
 height = 50
 
 class Leapy():
-    def __init__(self, x, y, width, height):
+    def __init__(self, x, y, width, height, color):
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+        self.color = color
 
     def jump():
         pass
@@ -22,8 +33,22 @@ class Leapy():
 
     def getRect(self):
         return (self.x, self.y, self.width, self.height)
+    
+    def getColor(self):
+        return self.color
 
-leapy = Leapy(x, y , width, height)
+    def moveLeft(self):
+        self.x -= 10
+    
+    def draw(self):
+        pg.draw.rect(window, self.getColor(), self.getRect())
+
+
+
+leapy = Leapy(x, y , width, height, (255, 0, 255))
+obstacles = []
+for i in range(4):
+    obstacles.append(Leapy(400 + (i * 100), 550, 50, 50, (255, 0, 0)))
 run = True
 jumping = False
 inversing = False
@@ -48,9 +73,9 @@ while run:
         else:
             inversing = True
             transUp = True
-    if keys[pg.K_SPACE] and not inversing:
+    if keys[pg.K_SPACE] and not inversing and not transDown and not transUp:
         jumping = True
-    if keys[pg.K_SPACE] and inversing:
+    if keys[pg.K_SPACE] and inversing and not transDown and not transUp:
         inverseJump = True
     if keys[pg.K_q]:
         run = False
@@ -93,7 +118,11 @@ while run:
             transUp = False
         
     window.fill((255, 255, 255))
-    pg.draw.rect(window, (255, 0, 255), leapy.getRect())
+    if True in [collide(leapy, obs) for obs in obstacles]:
+        run = False
+    leapy.draw()
+    [obs.draw() for obs in obstacles]
+    [obs.moveLeft() for obs in obstacles]
     pg.display.update()
 
 pg.quit()
