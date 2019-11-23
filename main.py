@@ -30,6 +30,7 @@ transUp = False
 pg.key.set_repeat(500)
 jump_count = 10
 while run:
+    # todo: add end game
     level = levels.getLevel1()
     inGame = True
     while inGame:
