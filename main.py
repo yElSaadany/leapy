@@ -1,9 +1,6 @@
 import pygame as pg
-import math
 from leapy import Leapy
 import levels as lvls
-def sigmoid(x):
-    return 1 / (1 + math.exp(-x))
 
 
 def collide(element1, element2):
