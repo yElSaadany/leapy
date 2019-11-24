@@ -15,6 +15,20 @@ class Levels():
 
     def addLevel(self, level):
         self.levels.append(level)
+        return "Level added as number %d" % (len(self.levels) - 1)
 
     def getLevel1(self):
         return self.levels[0]
+
+    def importLevel(self, levelFile):
+        with open(levelFile, 'r') as level:
+            lines = level.readlines()
+        
+        level = Level([])
+        for line in lines:
+            tmp = line.split(',')
+            tmp[-1] = tmp[-1][:-1]
+            tmp = list(map(int, tmp))
+            level.obstacles.append(Leapy(tmp[1], tmp[2], 50, 50,
+                                   (255, 0, 0)))
+        return self.addLevel(level)
