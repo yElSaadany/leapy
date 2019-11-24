@@ -23,3 +23,15 @@ class Leapy():
     
     def draw(self, window):
         pg.draw.rect(window, self.getColor(), self.getRect())
+
+    def getHitbox(self, axis):
+        if axis == 'x':
+            return (self.x, self.x + self.width)
+        else:
+            return (self.y, self.y + self.height)
+
+    def getPoints(self):
+        return [(self.x, self.y),
+                (self.x + self.width, self.y),
+                (self.x, self.y + self.height),
+                (self.x + self.width, self.y + self.height)]
