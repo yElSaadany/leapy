@@ -3,11 +3,30 @@ from leapy import Leapy
 import levels as lvls
 
 
-def collide(element1, element2):
-    if (element2.x >= element1.x and
-        element2.x <= (element1.x + element1.width) and
+def collide2(element1, element2):
+    if (element2.x <= (element1.x + element1.width) and
         element2.y <= (element1.y + element1.height)):
         return True
+
+def collide3(element1, element2):
+    hb_x = element1.getHitbox('x')
+    hb_y = element1.getHitbox('y')
+    if (element2.x >= hb_x[0] and element2.x <= hb_x[1] and
+        element2.y >= hb_y[0] and element2.y <= hb_y[1]):
+        return True
+
+def pointInHitbox(point, element):
+    if (point[0] >= element.x and
+        point[0] <= (element.x + element.width) and
+        point[1] >= element.y and
+        point[1] <= (element.y + element.height)):
+        return True
+    
+def collide(element1, element2):
+    if True in [pointInHitbox(point, element2)
+                for point in element1.getPoints()]:
+        return True
+
 pg.init()
 
 window = pg.display.set_mode((600, 600))
@@ -20,6 +39,7 @@ height = 50
 
 leapy = Leapy(x, y , width, height, (255, 0, 255))
 levels = lvls.Levels()
+print(levels.importLevel('data/levels/level1.lvl'))
 
 run = True
 jumping = False
@@ -31,7 +51,7 @@ pg.key.set_repeat(500)
 jump_count = 10
 while run:
     # todo: add end game
-    level = levels.getLevel1()
+    level = levels.levels[1]
     inGame = True
     while inGame:
         hold_return = False
