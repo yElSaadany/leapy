@@ -31,13 +31,14 @@ transDown = False
 transUp = False
 pg.key.set_repeat(500)
 jump_count = 10
-while run:
+i = 0
+while run and i < len(levels.levels):
     # todo: add end game
-    level = levels.levels[0]
+    level = levels.levels[i]
     inGame = True
     while inGame:
         hold_return = False
-        pg.time.delay(50)
+        pg.time.delay(30)
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 inGame = False
@@ -107,7 +108,12 @@ while run:
         if True in coins_collisions:
             del level.coins[coins_collisions.index(True)]
             score += 1
+
+        if leapy.x > level.endCoord[0]:
+            inGame = False
         window.blit(bg_image, [0, 0])
+        window.blit(levels.end, level.endCoord)
+        level.endCoord = (level.endCoord[0] - 10, level.endCoord[1])
         [coin.draw(window) for coin in level.coins]
         [coin.moveLeft() for coin in level.coins]
         [obs.draw(window) for obs in level.obstacles]
@@ -115,5 +121,8 @@ while run:
         window.blit(score_text.render(str(score), False, white), (550, 10))
         leapy.draw(window)
         pg.display.update()
+
+    i += 1
+
 
 pg.quit()

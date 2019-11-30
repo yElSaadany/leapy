@@ -1,3 +1,4 @@
+from pygame.image import load
 from leapy import Leapy, Coin
 
 
@@ -5,9 +6,12 @@ class Level():
     def __init__(self, obstacles, coins):
         self.obstacles = obstacles
         self.coins = coins
+        self.endCoord = None
 
 
 class Levels():
+    end = load('assets/end_flag.png')
+
     def __init__(self):
         self.levels = []
 
@@ -32,4 +36,7 @@ class Levels():
                                        (255, 0, 0)))
             elif tmp[0] == 1:
                 level.coins.append(Coin(tmp[1], tmp[2]))
+            else:
+                level.endCoord = [tmp[1], tmp[2]]
+                print(level.endCoord)
         return self.addLevel(level)
