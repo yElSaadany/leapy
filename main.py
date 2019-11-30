@@ -9,6 +9,7 @@ pg.init()
 window = pg.display.set_mode((600, 600))
 pg.display.set_caption("Leapy")
 bg_image = pg.image.load('assets/bg.png').convert()
+score_text = pg.font.Font('assets/RightBankFLF.ttf', 36)
 
 x = 100
 y = 550
@@ -20,6 +21,7 @@ coin = Coin(250, 250)
 levels = lvls.Levels()
 print(levels.importLevel('data/levels/level1.lvl'))
 
+white = (255, 255, 255)
 score = 0
 run = True
 jumping = False
@@ -105,12 +107,12 @@ while run:
         if True in coins_collisions:
             del level.coins[coins_collisions.index(True)]
             score += 1
-            print(score)
         window.blit(bg_image, [0, 0])
         [coin.draw(window) for coin in level.coins]
         [coin.moveLeft() for coin in level.coins]
         [obs.draw(window) for obs in level.obstacles]
         [obs.moveLeft() for obs in level.obstacles]
+        window.blit(score_text.render(str(score), False, white), (550, 10))
         leapy.draw(window)
         pg.display.update()
 
