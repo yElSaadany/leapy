@@ -12,11 +12,24 @@ Press **RETURN** to bend the rules of physics to your will and **bound** yoursel
 
 ## Installation
 
-You need Python 3.6+ and PyGame if you want to try it out.
 
 ### Linux-based
+
+#### Clone the repository
 ```bash
 git clone https://github.com/yElSaadany/leapy.git
-python leapy/main.py
 ```
-Compiled version is coming soon.
+
+#### Play from the executable
+```bash
+cd leapy
+./play
+```
+
+#### Play from the sources
+
+You're gonna need Python 3.7+ and PyGame if you want to try it out from the sources.
+```bash
+cd leapy
+python main.py
+```
