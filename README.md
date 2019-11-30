@@ -26,7 +26,7 @@ cd leapy
 ./play
 ```
 
-#### Play from the sources
+#### Play from the sources
 
 You're gonna need Python 3.7+ and PyGame if you want to try it out from the sources.
 ```bash
