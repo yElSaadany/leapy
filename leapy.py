@@ -38,7 +38,7 @@ class Leapy():
 
 
 class Coin():
-    image = pg.image.load('assets/coin.png')
+    image = pg.image.load('data/assets/coin.png')
 
     def __init__(self, x, y):
         self.x = x

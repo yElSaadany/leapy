@@ -8,8 +8,8 @@ pg.init()
 
 window = pg.display.set_mode((600, 600))
 pg.display.set_caption("Leapy")
-bg_image = pg.image.load('assets/bg.png').convert()
-score_text = pg.font.Font('assets/RightBankFLF.ttf', 36)
+bg_image = pg.image.load('data/assets/bg.png').convert()
+score_text = pg.font.Font('data/assets/RightBankFLF.ttf', 36)
 
 x = 100
 y = 550

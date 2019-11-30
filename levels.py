@@ -10,7 +10,7 @@ class Level():
 
 
 class Levels():
-    end = load('assets/end_flag.png')
+    end = load('data/assets/end_flag.png')
 
     def __init__(self):
         self.levels = []
