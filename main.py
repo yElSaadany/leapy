@@ -21,10 +21,6 @@ white = (255, 255, 255)
 purple = (255, 0, 255)
 gray = (180, 180, 180)
 
-leapy = Leapy(x, y, width, height, purple)
-levels = lvls.Levels()
-print(levels.importLevel('data/levels/level1.lvl'))
-
 
 def text_object(text, size, color):
     font = pg.font.Font('data/assets/RightBankFLF.ttf', size)
@@ -38,13 +34,13 @@ def intro_loop():
         window.blit(bg_image, (0, 0))
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                return 1
+                return "quit"
         
         keys = pg.key.get_pressed()
         if keys[pg.K_q]:
-            return 1
+            return "quit"
         if keys[pg.K_RETURN]:
-            return 0
+            return "play"
 
         mouseX = pg.mouse.get_pos()[0]
         mouseY = pg.mouse.get_pos()[1]
@@ -64,10 +60,63 @@ def intro_loop():
                 and mouseY >= playRect[1]
                 and mouseY <= (playRect[1] + playText.get_height())):
             if click:
-                return 0
+                return "play"
         window.blit(titleText, titleRect)
         window.blit(playText, playRect)
         pg.display.update()
+
+
+def button(text_object, color, pos, handler):
+    pg.draw.rect(window, color, (pos[0],
+                                 pos[1],
+                                 text_object.get_width(),
+                                 text_object.get_height()))
+    window.blit(text_object, pos)
+
+    mouseX = pg.mouse.get_pos()[0]
+    mouseY = pg.mouse.get_pos()[1]
+    click = pg.mouse.get_pressed()[0]
+
+    if (mouseX >= pos[0]
+            and mouseX <= (pos[0] + text_object.get_width())
+            and mouseY >= pos[1]
+            and mouseY <= (pos[1] + text_object.get_height())):
+        if click:
+            return handler
+    return None
+
+
+def gameover():
+    sleep(2)
+    play = False
+
+    while not play:
+        window.blit(bg_image, (0, 0))
+        for event in pg.event.get():
+            if event.type == pg.QUIT:
+                return "quit"
+        keys = pg.key.get_pressed()
+        if keys[pg.K_q]:
+            return "quit"
+
+        byeText = text_object("Game Over", 100, white)
+        playAgain = text_object("Play Again", 60, white)
+        quit = text_object("Exit", 60, white)
+
+        window.blit(byeText, (300 - (byeText.get_width() / 2), 100))
+        playAction = button(playAgain, purple, (300 - (playAgain.get_width() / 2), 300),
+                            "play")
+        quitAction = button(quit, purple, (300 - (quit.get_width() / 2), 400), "quit")
+        if playAction is not None:
+            return playAction
+        if quitAction is not None:
+            return quitAction
+        pg.display.update()
+    sleep(2)
+
+
+def exit_sequence():
+    return
 
 
 def wait_pregame():
@@ -81,6 +130,7 @@ def wait_pregame():
 
 
 def game_loop():
+    wait_pregame()
     score = 0
     run = True
     jumping = False
@@ -182,9 +232,22 @@ def game_loop():
             pg.display.update()
 
         i += 1
+    if not run:
+        return "over"
+    if run and i == len(levels.levels):
+        return "over"
 
 
-if intro_loop() == 0:
-    wait_pregame()
-    game_loop()
+game = True
+switch = intro_loop()
+while game:
+    if switch == "play":
+        leapy = Leapy(x, y, width, height, purple)
+        levels = lvls.Levels()
+        print(levels.importLevel('data/levels/level1.lvl'))
+        switch = game_loop()
+    if switch == "quit":
+        game = False
+    if switch == "over":
+        switch = gameover()
 pg.quit()
