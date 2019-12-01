@@ -63,6 +63,14 @@ def intro_loop():
                 return "play"
         window.blit(titleText, titleRect)
         window.blit(playText, playRect)
+        
+        quit = text_object("Exit", 60, purple)
+        quitAction = button(quit, gray, (300 - (quit.get_width() / 2), 400), "quit")
+        if quitAction is not None:
+            return quitAction
+        # only one level warning
+        oneLevel = text_object("This is a very early alpha, there's only one level, but more are coming.", 23, white)
+        window.blit(oneLevel, (300 - (oneLevel.get_width() / 2), 250))
         pg.display.update()
 
 
@@ -86,7 +94,7 @@ def button(text_object, color, pos, handler):
     return None
 
 
-def gameover():
+def gameover(winner=False):
     sleep(2)
     play = False
 
@@ -99,7 +107,10 @@ def gameover():
         if keys[pg.K_q]:
             return "quit"
 
-        byeText = text_object("Game Over", 100, white)
+        if winner:
+            byeText = text_object("You Win!", 100, white)
+        else:
+            byeText = text_object("Game Over", 100, white)
         playAgain = text_object("Play Again", 60, white)
         quit = text_object("Exit", 60, white)
 
@@ -235,7 +246,7 @@ def game_loop():
     if not run:
         return "over"
     if run and i == len(levels.levels):
-        return "over"
+        return "win"
 
 
 game = True
@@ -250,4 +261,6 @@ while game:
         game = False
     if switch == "over":
         switch = gameover()
+    if switch == "win":
+        switch = gameover(True)
 pg.quit()
