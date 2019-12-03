@@ -1,4 +1,5 @@
 import pygame as pg
+import os
 from leapy import Leapy
 import levels as lvls
 from physics import collide
@@ -130,18 +131,22 @@ def exit_sequence():
     return
 
 
-def wait_pregame():
+def wait_pregame(level):
+    level = "Level %d" % (level+1)
+    
     for i in [3, 2, 1]:
         countdown = text_object(str(i), 200, white)
         window.blit(bg_image, (0, 0))
         window.blit(countdown, (300 - (countdown.get_width() / 2),
                                 300 - (countdown.get_height() / 2)))
+
+        levelText = text_object(level, 50, purple)
+        window.blit(levelText, (300 - (levelText.get_width() / 2), 100))
         pg.display.update()
         sleep(1)
 
 
 def game_loop():
-    wait_pregame()
     score = 0
     run = True
     jumping = False
@@ -153,8 +158,9 @@ def game_loop():
     jump_count = 10
     i = 0
     while run and i < len(levels.levels):
-        # todo: add end game
         level = levels.levels[i]
+        wait_pregame(i)
+        # todo: add end game
         inGame = True
         while inGame:
             pg.time.delay(30)
@@ -255,7 +261,8 @@ while game:
     if switch == "play":
         leapy = Leapy(x, y, width, height, purple)
         levels = lvls.Levels()
-        print(levels.importLevel('data/levels/level1.lvl'))
+        for level in os.listdir("./data/levels"):
+            print(levels.importLevel('data/levels/%s' % level))
         switch = game_loop()
     if switch == "quit":
         game = False
