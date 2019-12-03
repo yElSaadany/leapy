@@ -7,6 +7,7 @@ class Level():
         self.obstacles = obstacles
         self.coins = coins
         self.endCoord = None
+        self.numberCoins = len(self.coins)
 
 
 class Levels():
