@@ -1,6 +1,6 @@
 import pygame as pg
 import os
-from leapy import Leapy
+from leapy import Leapy, Coin
 import levels as lvls
 from physics import collide
 from time import sleep
@@ -95,7 +95,7 @@ def button(text_object, color, pos, handler):
     return None
 
 
-def gameover(winner=False):
+def gameover(winner=None):
     sleep(2)
     play = False
 
@@ -108,8 +108,12 @@ def gameover(winner=False):
         if keys[pg.K_q]:
             return "quit"
 
-        if winner:
+        if winner is not None:
             byeText = text_object("You Win!", 100, white)
+            coinsText = "%d/%d" % (winner[0], winner[1])
+            coinsText = text_object(coinsText, 40, white)
+            window.blit(Coin.image, (200, 200))
+            window.blit(coinsText, (260, 200))
         else:
             byeText = text_object("Game Over", 100, white)
         playAgain = text_object("Play Again", 60, white)
@@ -252,7 +256,7 @@ def game_loop():
     if not run:
         return "over"
     if run and i == len(levels.levels):
-        return "win"
+        return (score, sum([level.numberCoins for level in levels.levels]))
 
 
 game = True
@@ -268,6 +272,6 @@ while game:
         game = False
     if switch == "over":
         switch = gameover()
-    if switch == "win":
-        switch = gameover(True)
+    if type(switch) == tuple:
+        switch = gameover(switch)
 pg.quit()
